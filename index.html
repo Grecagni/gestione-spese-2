@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Spese</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon.png"> <!-- Sostituisci con il percorso della tua icona -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Firebase App (sempre necessario) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <!-- Firebase Authentication -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script>
+        // La tua configurazione Firebase
+        var firebaseConfig = {
+            apiKey: "LA_TUA_API_KEY",
+            authDomain: "il-tuo-progetto.firebaseapp.com",
+            projectId: "il-tuo-progetto",
+            storageBucket: "il-tuo-progetto.appspot.com",
+            messagingSenderId: "IL_TUO_MESSAGING_SENDER_ID",
+            appId: "IL_TUO_APP_ID"
+        };
+        // Inizializza Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
+</head>
+<body>
+    <h1>Gestione Spese</h1>
+
+    <div id="auth-container"></div>
+
+    <div id="content" style="display: none;">
+        <h2>Spesa</h2>
+        <form id="expenseForm">
+            <input type="text" id="description" placeholder="Descrizione spesa" required>
+            <input type="date" id="date" required>
+            <input type="number" id="totalAmount" placeholder="Importo totale" required>
+
+            <h3>Chi ha messo cosa:</h3>
+            <div id="payers">
+                <div>
+                    <label>Jack:</label>
+                    <input type="number" id="jackAmount" placeholder="Importo messo da Jack" required>
+                </div>
+                <div>
+                    <label>Ste:</label>
+                    <input type="number" id="steAmount" placeholder="Importo messo da Ste" required>
+                </div>
+            </div>
+
+            <h3>Divisione della spesa:</h3>
+            <div id="splitMethod">
+                <label for="splitType">Tipo di divisione:</label>
+                <select id="splitType">
+                    <option value="equally">Equamente</option>
+                    <option value="percentage">Percentuale</option>
+                    <option value="exact">Importo esatto</option>
+                </select>
+            </div>
+
+            <div id="splitDetails" style="display:none;">
+                <div>
+                    <label>Percentuale/Importo per Jack:</label>
+                    <input type="number" id="jackSplit" placeholder="Percentuale/Importo per Jack">
+                </div>
+                <div>
+                    <label>Percentuale/Importo per Ste:</label>
+                    <input type="number" id="steSplit" placeholder="Percentuale/Importo per Ste">
+                </div>
+            </div>
+
+            <button type="submit">Aggiungi Spesa</button>
+        </form>
+
+        <h2>Elenco Spese</h2>
+        <div id="totalBalance"></div>
+
+        <select id="filterName" onchange="filterExpenses()">
+            <option value="all">Tutti</option>
+            <option value="Jack">Jack</option>
+            <option value="Ste">Ste</option>
+        </select>
+
+        <table id="expenseTable">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Descrizione</th>
+                    <th>Totale</th>
+                    <th>Jack (messo)</th>
+                    <th>Ste (messo)</th>
+                    <th>Jack (dovuto)</th>
+                    <th>Ste (dovuto)</th>
+                    <th>Jack (saldo)</th>
+                    <th>Ste (saldo)</th>
+                    <th>Azione</th>
+                </tr>
+            </thead>
+            <tbody id="expenseList"></tbody>
+        </table>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

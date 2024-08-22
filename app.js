@@ -1,4 +1,3 @@
-
 // Firebase Authentication
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {

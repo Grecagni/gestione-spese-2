@@ -139,9 +139,7 @@ function displayExpenses() {
                 <td>€${parseFloat(expense.steAmount).toFixed(2)}</td>
                 <td>€${parseFloat(expense.jackShare).toFixed(2)}</td>
                 <td>€${parseFloat(expense.steShare).toFixed(2)}</td>
-                <td>€${parseFloat(expense.jackBalance).toFixed(2)}</td>
-                <td>€${parseFloat(expense.steBalance).toFixed(2)}</td>
-                <td><button class="delete-btn" onclick="deleteExpense('${doc.id}')">Elimina</button></td>
+                <td><button class="delete-btn" onclick="confirmDeleteExpense('${doc.id}')">Elimina</button></td>
             `;
             expenseList.appendChild(row);
 
@@ -149,8 +147,25 @@ function displayExpenses() {
             totalSteBalance += parseFloat(expense.steBalance);
         });
 
-        document.getElementById('totalBalance').textContent = `Totale Saldo: Jack: €${totalJackBalance.toFixed(2)}, Ste: €${totalSteBalance.toFixed(2)}`;
+        const totalBalance = totalJackBalance + totalSteBalance;
+        let balanceText = '';
+
+        if (totalBalance > 0) {
+            balanceText = `Jack deve dare a Ste: €${totalBalance.toFixed(2)}`;
+        } else if (totalBalance < 0) {
+            balanceText = `Ste deve dare a Jack: €${Math.abs(totalBalance).toFixed(2)}`;
+        } else {
+            balanceText = `Jack e Ste sono pari.`;
+        }
+
+        document.getElementById('totalBalance').textContent = balanceText;
     });
+}
+
+function confirmDeleteExpense(id) {
+    if (confirm("Sei sicuro di voler eliminare questa spesa?")) {
+        deleteExpense(id);
+    }
 }
 
 function deleteExpense(id) {

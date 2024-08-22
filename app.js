@@ -38,8 +38,6 @@ function signup() {
         });
 }
 
-let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
-
 document.getElementById('splitType').addEventListener('change', function() {
     const splitType = this.value;
     const splitDetails = document.getElementById('splitDetails');
@@ -90,13 +88,18 @@ document.getElementById('expenseForm').addEventListener('submit', function(e) {
         jackShare,
         steShare,
         jackBalance,
-        steBalance
+        steBalance,
+        userId: firebase.auth().currentUser.uid
     };
 
-    expenses.push(expense);
-    expenses.sort((a, b) => new Date(b.date) - new Date(a.date));
-    localStorage.setItem('expenses', JSON.stringify(expenses));
-    displayExpenses();
+    // Aggiungi la spesa a Firestore
+    db.collection("expenses").add(expense)
+        .then(() => {
+            displayExpenses();
+        })
+        .catch((error) => {
+            console.error("Errore nell'aggiungere la spesa: ", error);
+        });
 
     document.getElementById('description').value = '';
     document.getElementById('date').value = '';
@@ -111,65 +114,43 @@ function displayExpenses() {
     const expenseList = document.getElementById('expenseList');
     expenseList.innerHTML = '';
 
-    let totalJackBalance = 0;
-    let totalSteBalance = 0;
+    db.collection("expenses").get().then((querySnapshot) => {
+        let totalJackBalance = 0;
+        let totalSteBalance = 0;
 
-    expenses.forEach((expense, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${expense.date}</td>
-            <td>${expense.description}</td>
-            <td>€${expense.totalAmount}</td>
-            <td>€${expense.jackAmount}</td>
-            <td>€${expense.steAmount}</td>
-            <td>€${expense.jackShare}</td>
-            <td>€${expense.steShare}</td>
-            <td>€${expense.jackBalance}</td>
-            <td>€${expense.steBalance}</td>
-            <td><button class="delete-btn" onclick="deleteExpense(${index})">Elimina</button></td>
-        `;
-        expenseList.appendChild(row);
+        querySnapshot.forEach((doc) => {
+            const expense = doc.data();
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${expense.date}</td>
+                <td>${expense.description}</td>
+                <td>€${expense.totalAmount}</td>
+                <td>€${expense.jackAmount}</td>
+                <td>€${expense.steAmount}</td>
+                <td>€${expense.jackShare}</td>
+                <td>€${expense.steShare}</td>
+                <td>€${expense.jackBalance}</td>
+                <td>€${expense.steBalance}</td>
+                <td><button class="delete-btn" onclick="deleteExpense('${doc.id}')">Elimina</button></td>
+            `;
+            expenseList.appendChild(row);
 
-        totalJackBalance += parseFloat(expense.jackBalance);
-        totalSteBalance += parseFloat(expense.steBalance);
+            totalJackBalance += parseFloat(expense.jackBalance);
+            totalSteBalance += parseFloat(expense.steBalance);
+        });
+
+        document.getElementById('totalBalance').textContent = `Totale Saldo: Jack: €${totalJackBalance.toFixed(2)}, Ste: €${totalSteBalance.toFixed(2)}`;
     });
-
-    document.getElementById('totalBalance').textContent = `Totale Saldo: Jack: €${totalJackBalance.toFixed(2)}, Ste: €${totalSteBalance.toFixed(2)}`;
 }
 
-function deleteExpense(index) {
-    expenses.splice(index, 1);
-    localStorage.setItem('expenses', JSON.stringify(expenses));
-    displayExpenses();
-}
-
-function filterExpenses() {
-    const filterName = document.getElementById('filterName').value;
-    const expenseList = document.getElementById('expenseList');
-    expenseList.innerHTML = '';
-
-    let filteredExpenses = expenses;
-
-    if (filterName !== 'all') {
-        filteredExpenses = expenses.filter(expense => filterName === 'Jack' && expense.jackAmount > 0 || filterName === 'Ste' && expense.steAmount > 0);
-    }
-
-    filteredExpenses.forEach((expense, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${expense.date}</td>
-            <td>${expense.description}</td>
-            <td>€${expense.totalAmount}</td>
-            <td>€${expense.jackAmount}</td>
-            <td>€${expense.steAmount}</td>
-            <td>€${expense.jackShare}</td>
-            <td>€${expense.steShare}</td>
-            <td>€${expense.jackBalance}</td>
-            <td>€${expense.steBalance}</td>
-            <td><button class="delete-btn" onclick="deleteExpense(${index})">Elimina</button></td>
-        `;
-        expenseList.appendChild(row);
-    });
+function deleteExpense(id) {
+    db.collection("expenses").doc(id).delete()
+        .then(() => {
+            displayExpenses();
+        })
+        .catch((error) => {
+            console.error("Errore nell'eliminare la spesa: ", error);
+        });
 }
 
 document.addEventListener('DOMContentLoaded', displayExpenses);

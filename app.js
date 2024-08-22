@@ -131,8 +131,10 @@ function displayExpenses() {
         // Svuota l'elenco prima di aggiungere nuove spese
         expenseList.innerHTML = '';
 
-        let totalJackBalance = 0;
-        let totalSteBalance = 0;
+        let totalJackMesso = 0;
+        let totalSteMesso = 0;
+        let totalJackDovuto = 0;
+        let totalSteDovuto = 0;
 
         querySnapshot.forEach((doc) => {
             const expense = doc.data();
@@ -149,18 +151,20 @@ function displayExpenses() {
             `;
             expenseList.appendChild(row);
 
-            // Accumula i saldi totali
-            totalJackBalance += parseFloat(expense.jackBalance);
-            totalSteBalance += parseFloat(expense.steBalance);
+            // Accumula i totali per Jack e Ste
+            totalJackMesso += parseFloat(expense.jackAmount);
+            totalSteMesso += parseFloat(expense.steAmount);
+            totalJackDovuto += parseFloat(expense.jackShare);
+            totalSteDovuto += parseFloat(expense.steShare);
         });
 
-        const totalBalance = totalJackBalance - totalSteBalance;
+        const jackBalance = totalJackMesso - totalJackDovuto;
         let balanceText = '';
 
-        if (totalBalance > 0) {
-            balanceText = `Ste deve dare a Jack: €${totalBalance.toFixed(2)}`;
-        } else if (totalBalance < 0) {
-            balanceText = `Jack deve dare a Ste: €${Math.abs(totalBalance).toFixed(2)}`;
+        if (jackBalance > 0) {
+            balanceText = `Ste deve dare a Jack: €${jackBalance.toFixed(2)}`;
+        } else if (jackBalance < 0) {
+            balanceText = `Jack deve dare a Ste: €${Math.abs(jackBalance).toFixed(2)}`;
         } else {
             balanceText = `Jack e Ste sono pari.`;
         }

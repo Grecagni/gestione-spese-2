@@ -54,26 +54,33 @@ document.getElementById('expenseForm').addEventListener('submit', function(e) {
 
     const description = document.getElementById('description').value;
     const date = document.getElementById('date').value;
-    const totalAmount = parseFloat(document.getElementById('totalAmount').value) || 0;
+    const totalAmount = parseFloat(document.getElementById('totalAmount').value).toFixed(2);
     
-    const jackAmount = parseFloat(document.getElementById('jackAmount').value) || 0;
-    const steAmount = parseFloat(document.getElementById('steAmount').value) || 0;
+    const jackAmount = parseFloat(document.getElementById('jackAmount').value).toFixed(2);
+    const steAmount = parseFloat(document.getElementById('steAmount').value).toFixed(2);
+
+    // Controllo 1: La somma di chi ha messo cosa deve essere uguale al totale
+    if ((parseFloat(jackAmount) + parseFloat(steAmount)).toFixed(2) != totalAmount) {
+        alert("La somma di chi ha messo cosa deve essere uguale all'importo totale della spesa.");
+        return;
+    }
 
     const splitType = document.getElementById('splitType').value;
     let jackShare = 0;
     let steShare = 0;
 
     if (splitType === 'equally') {
-        jackShare = totalAmount / 2;
-        steShare = totalAmount / 2;
-    } else if (splitType === 'percentage') {
-        const jackPercentage = parseFloat(document.getElementById('jackSplit').value) || 0;
-        const stePercentage = parseFloat(document.getElementById('steSplit').value) || 0;
-        jackShare = (totalAmount * jackPercentage) / 100;
-        steShare = (totalAmount * stePercentage) / 100;
+        jackShare = (totalAmount / 2).toFixed(2);
+        steShare = (totalAmount / 2).toFixed(2);
     } else if (splitType === 'exact') {
-        jackShare = parseFloat(document.getElementById('jackSplit').value) || 0;
-        steShare = parseFloat(document.getElementById('steSplit').value) || 0;
+        jackShare = parseFloat(document.getElementById('jackSplit').value).toFixed(2);
+        steShare = parseFloat(document.getElementById('steSplit').value).toFixed(2);
+
+        // Controllo 2: La somma della divisione deve essere uguale al totale
+        if ((parseFloat(jackShare) + parseFloat(steShare)).toFixed(2) != totalAmount) {
+            alert("La somma della divisione spesa deve essere uguale all'importo totale della spesa.");
+            return;
+        }
     }
 
     const jackBalance = (jackShare - jackAmount).toFixed(2);
@@ -82,13 +89,13 @@ document.getElementById('expenseForm').addEventListener('submit', function(e) {
     const expense = {
         description,
         date,
-        totalAmount,
-        jackAmount,
-        steAmount,
-        jackShare,
-        steShare,
-        jackBalance,
-        steBalance,
+        totalAmount: totalAmount,
+        jackAmount: jackAmount,
+        steAmount: steAmount,
+        jackShare: jackShare,
+        steShare: steShare,
+        jackBalance: jackBalance,
+        steBalance: steBalance,
         userId: firebase.auth().currentUser.uid
     };
 
@@ -127,13 +134,13 @@ function displayExpenses() {
             row.innerHTML = `
                 <td>${expense.date}</td>
                 <td>${expense.description}</td>
-                <td>€${expense.totalAmount}</td>
-                <td>€${expense.jackAmount}</td>
-                <td>€${expense.steAmount}</td>
-                <td>€${expense.jackShare}</td>
-                <td>€${expense.steShare}</td>
-                <td>€${expense.jackBalance}</td>
-                <td>€${expense.steBalance}</td>
+                <td>€${parseFloat(expense.totalAmount).toFixed(2)}</td>
+                <td>€${parseFloat(expense.jackAmount).toFixed(2)}</td>
+                <td>€${parseFloat(expense.steAmount).toFixed(2)}</td>
+                <td>€${parseFloat(expense.jackShare).toFixed(2)}</td>
+                <td>€${parseFloat(expense.steShare).toFixed(2)}</td>
+                <td>€${parseFloat(expense.jackBalance).toFixed(2)}</td>
+                <td>€${parseFloat(expense.steBalance).toFixed(2)}</td>
                 <td><button class="delete-btn" onclick="deleteExpense('${doc.id}')">Elimina</button></td>
             `;
             expenseList.appendChild(row);

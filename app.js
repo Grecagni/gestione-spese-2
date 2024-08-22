@@ -164,7 +164,7 @@ function deleteExpense(id) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Imposta la data odierna come default
+    // Imposta la data odierna come default nel formato yyyy-mm-dd
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('date').value = today;
 

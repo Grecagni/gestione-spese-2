@@ -112,6 +112,8 @@ document.getElementById('expenseForm').addEventListener('submit', function(e) {
 
 function displayExpenses() {
     const expenseList = document.getElementById('expenseList');
+    
+    // Svuota l'elenco prima di aggiungere nuove spese
     expenseList.innerHTML = '';
 
     db.collection("expenses").get().then((querySnapshot) => {

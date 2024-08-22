@@ -117,6 +117,12 @@ document.getElementById('expenseForm').addEventListener('submit', function(e) {
     document.getElementById('steSplit').value = '';
 });
 
+function formatDate(dateString) {
+    const options = { year: '2-digit', month: '2-digit', day: '2-digit' };
+    const date = new Date(dateString);
+    return date.toLocaleDateString('it-IT', options);
+}
+
 function displayExpenses() {
     const expenseList = document.getElementById('expenseList');
     
@@ -132,7 +138,7 @@ function displayExpenses() {
             const expense = doc.data();
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${expense.date}</td>
+                <td>${formatDate(expense.date)}</td>
                 <td>${expense.description}</td>
                 <td>€${parseFloat(expense.totalAmount).toFixed(2)}</td>
                 <td>€${parseFloat(expense.jackAmount).toFixed(2)}</td>

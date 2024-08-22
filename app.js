@@ -143,6 +143,7 @@ function displayExpenses() {
             `;
             expenseList.appendChild(row);
 
+            // Accumula i saldi totali
             totalJackBalance += parseFloat(expense.jackBalance);
             totalSteBalance += parseFloat(expense.steBalance);
         });

@@ -71,6 +71,7 @@ th, td {
     padding: 10px;
     border: 1px solid #ddd;
     font-size: 14px;
+    white-space: nowrap; /* Impedisce il ritorno a capo */
 }
 
 th {
@@ -78,7 +79,6 @@ th {
     color: white;
     font-weight: 500;
     word-wrap: break-word;
-    white-space: nowrap;
 }
 
 td {

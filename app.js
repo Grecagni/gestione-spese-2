@@ -163,4 +163,10 @@ function deleteExpense(id) {
         });
 }
 
-document.addEventListener('DOMContentLoaded', displayExpenses);
+document.addEventListener('DOMContentLoaded', function() {
+    // Imposta la data odierna come default
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('date').value = today;
+
+    displayExpenses();
+});

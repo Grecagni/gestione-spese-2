@@ -113,10 +113,11 @@ document.getElementById('expenseForm').addEventListener('submit', function(e) {
 function displayExpenses() {
     const expenseList = document.getElementById('expenseList');
     
-    // Svuota l'elenco prima di aggiungere nuove spese
-    expenseList.innerHTML = '';
+    // Usa onSnapshot per aggiornare in tempo reale
+    db.collection("expenses").onSnapshot((querySnapshot) => {
+        // Svuota l'elenco prima di aggiungere nuove spese
+        expenseList.innerHTML = '';
 
-    db.collection("expenses").get().then((querySnapshot) => {
         let totalJackBalance = 0;
         let totalSteBalance = 0;
 

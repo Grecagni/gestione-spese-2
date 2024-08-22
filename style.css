@@ -77,6 +77,8 @@ th {
     background-color: #007aff;
     color: white;
     font-weight: 500;
+    word-wrap: break-word;
+    white-space: nowrap;
 }
 
 td {

@@ -154,13 +154,13 @@ function displayExpenses() {
             totalSteBalance += parseFloat(expense.steBalance);
         });
 
-        const totalBalance = totalSteBalance - totalJackBalance;
+        const totalBalance = totalJackBalance - totalSteBalance;
         let balanceText = '';
 
         if (totalBalance > 0) {
-            balanceText = `Jack deve dare a Ste: €${totalBalance.toFixed(2)}`;
+            balanceText = `Ste deve dare a Jack: €${totalBalance.toFixed(2)}`;
         } else if (totalBalance < 0) {
-            balanceText = `Ste deve dare a Jack: €${Math.abs(totalBalance).toFixed(2)}`;
+            balanceText = `Jack deve dare a Ste: €${Math.abs(totalBalance).toFixed(2)}`;
         } else {
             balanceText = `Jack e Ste sono pari.`;
         }

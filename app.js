@@ -121,7 +121,7 @@ function displayExpenses() {
     const expenseList = document.getElementById('expenseList');
     
     // Usa onSnapshot per aggiornare in tempo reale
-    db.collection("expenses").onSnapshot((querySnapshot) => {
+    db.collection("expenses").orderBy("date", "desc").onSnapshot((querySnapshot) => {
         // Svuota l'elenco prima di aggiungere nuove spese
         expenseList.innerHTML = '';
 
@@ -148,13 +148,13 @@ function displayExpenses() {
             totalSteBalance += parseFloat(expense.steBalance);
         });
 
-        const totalBalance = totalJackBalance - totalSteBalance;
+        const totalBalance = totalSteBalance - totalJackBalance;
         let balanceText = '';
 
         if (totalBalance > 0) {
-            balanceText = `Ste deve dare a Jack: €${totalBalance.toFixed(2)}`;
+            balanceText = `Jack deve dare a Ste: €${totalBalance.toFixed(2)}`;
         } else if (totalBalance < 0) {
-            balanceText = `Jack deve dare a Ste: €${Math.abs(totalBalance).toFixed(2)}`;
+            balanceText = `Ste deve dare a Jack: €${Math.abs(totalBalance).toFixed(2)}`;
         } else {
             balanceText = `Jack e Ste sono pari.`;
         }

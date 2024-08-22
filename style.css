@@ -1,28 +1,31 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f2f2f7;
     margin: 0;
     padding: 20px;
     text-align: center;
 }
 
 h1 {
-    color: #333;
+    color: #1c1c1e;
+    font-weight: 600;
 }
 
 #expenseFormContainer, #expenseTableContainer {
-    background-color: white;
+    background-color: #ffffff;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     display: inline-block;
     text-align: center;
-    width: 700px;
+    width: 100%;
+    max-width: 700px;
     margin-bottom: 20px;
 }
 
 h2 {
-    color: #333;
+    color: #1c1c1e;
+    font-weight: 500;
 }
 
 form {
@@ -33,27 +36,46 @@ form {
 
 form input, form select, form button {
     margin-bottom: 10px;
-    padding: 10px;
+    padding: 12px;
     font-size: 16px;
-    width: 80%;
+    border-radius: 10px;
+    border: 1px solid #c7c7cc;
+    width: 100%;
+    max-width: 300px;
     text-align: center;
 }
 
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 300px;
+}
+
+.form-row label {
+    flex: 1;
+    text-align: right;
+    margin-right: 10px;
+}
+
 table {
-    width: 700px;
+    width: 100%;
+    max-width: 700px;
     margin: 0 auto;
     border-collapse: collapse;
 }
 
 th, td {
-    padding: 8px;
+    padding: 10px;
     border: 1px solid #ddd;
     font-size: 14px;
 }
 
 th {
-    background-color: #4CAF50;
+    background-color: #007aff;
     color: white;
+    font-weight: 500;
 }
 
 td {
@@ -61,14 +83,24 @@ td {
 }
 
 .delete-btn {
-    background-color: #f44336;
+    background-color: #ff3b30;
     color: white;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
 .delete-btn:hover {
-    background-color: #d32f2f;
+    background-color: #ff453a;
+}
+
+@media only screen and (max-width: 600px) {
+    #expenseFormContainer, #expenseTableContainer {
+        width: 90%;
+    }
+
+    table {
+        font-size: 12px;
+    }
 }

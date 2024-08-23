@@ -20,7 +20,7 @@ h1 {
     text-align: center;
     width: 100%;
     max-width: 700px;
-    margin-bottom: 20px;
+    margin: 0 auto 20px auto;
 }
 
 h2 {

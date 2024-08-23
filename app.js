@@ -38,6 +38,16 @@ function signup() {
         });
 }
 
+// Mostra o nascondi il form di inserimento delle spese
+document.getElementById('addExpenseBtn').addEventListener('click', function() {
+    const formContainer = document.getElementById('expenseFormContainer');
+    if (formContainer.style.display === 'none' || formContainer.style.display === '') {
+        formContainer.style.display = 'block';
+    } else {
+        formContainer.style.display = 'none';
+    }
+});
+
 document.getElementById('splitType').addEventListener('change', function() {
     const splitType = this.value;
     const splitDetails = document.getElementById('splitDetails');
@@ -103,6 +113,7 @@ document.getElementById('expenseForm').addEventListener('submit', function(e) {
     db.collection("expenses").add(expense)
         .then(() => {
             displayExpenses();
+            document.getElementById('expenseFormContainer').style.display = 'none'; // Nascondi il form dopo l'inserimento
         })
         .catch((error) => {
             console.error("Errore nell'aggiungere la spesa: ", error);

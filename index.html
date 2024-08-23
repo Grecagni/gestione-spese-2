@@ -6,30 +6,17 @@
     <title>Gestione Spese</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png"> <!-- Sostituisci con il percorso della tua icona -->
     <link rel="stylesheet" href="style.css">
 
     <!-- Firebase App (sempre necessario) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <!-- Firebase Firestore -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <!-- Firebase Authentication -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="app.js"></script>
 
-    <!-- Configurazione Firebase -->
-    <script>
-        var firebaseConfig = {
-            apiKey: "AIzaSyA6usjd2E5ytJz8Mx9SqjQXGXPgnOAeqYw",
-            authDomain: "gestione-spese-2-5db43.firebaseapp.com",
-            projectId: "gestione-spese-2-5db43",
-            storageBucket: "gestione-spese-2-5db43.appspot.com",
-            messagingSenderId: "583349146945",
-            appId: "1:583349146945:web:af0989d9c1889b1ef77dc0"
-        };
-        // Inizializza Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-    </script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 </head>
 <body>
     <h1>Gestione Spese</h1>
@@ -37,22 +24,47 @@
     <div id="auth-container"></div>
 
     <div id="content" style="display: none;">
-        <div id="expenseFormContainer">
-            <h2>Spesa</h2>
+        <!-- Sezione Elenco Spese e Saldo -->
+        <div id="expenseTableContainer">
+            <h2>Elenco Spese</h2>
+            <div id="totalBalance"></div>
+            <table id="expenseTable">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Descrizione</th>
+                        <th>Totale</th>
+                        <th>Jack (messo)</th>
+                        <th>Ste (messo)</th>
+                        <th>Jack (dovuto)</th>
+                        <th>Ste (dovuto)</th>
+                        <th>Azione</th>
+                    </tr>
+                </thead>
+                <tbody id="expenseList"></tbody>
+            </table>
+        </div>
+
+        <!-- Pulsante per aggiungere una nuova spesa -->
+        <button id="addExpenseBtn" class="add-btn">Aggiungi Spesa</button>
+
+        <!-- Form di inserimento spesa (inizialmente nascosto) -->
+        <div id="expenseFormContainer" style="display: none;">
+            <h2>Inserisci Nuova Spesa</h2>
             <form id="expenseForm">
                 <input type="text" id="description" placeholder="Descrizione spesa" required>
                 <input type="date" id="date" required>
-                <input type="number" id="totalAmount" placeholder="Importo totale" step="0.01" required>
+                <input type="number" id="totalAmount" placeholder="Importo totale" required>
 
                 <h3>Chi ha messo cosa:</h3>
                 <div id="payers">
-                    <div class="form-row">
+                    <div>
                         <label>Jack:</label>
-                        <input type="number" id="jackAmount" placeholder="Importo messo da Jack" step="0.01" required>
+                        <input type="number" id="jackAmount" placeholder="Importo messo da Jack" required>
                     </div>
-                    <div class="form-row">
+                    <div>
                         <label>Ste:</label>
-                        <input type="number" id="steAmount" placeholder="Importo messo da Ste" step="0.01" required>
+                        <input type="number" id="steAmount" placeholder="Importo messo da Ste" required>
                     </div>
                 </div>
 
@@ -66,40 +78,19 @@
                 </div>
 
                 <div id="splitDetails" style="display:none;">
-                    <div class="form-row">
+                    <div>
                         <label>Importo per Jack:</label>
-                        <input type="number" id="jackSplit" placeholder="Importo per Jack" step="0.01">
+                        <input type="number" id="jackSplit" placeholder="Importo per Jack">
                     </div>
-                    <div class="form-row">
+                    <div>
                         <label>Importo per Ste:</label>
-                        <input type="number" id="steSplit" placeholder="Importo per Ste" step="0.01">
+                        <input type="number" id="steSplit" placeholder="Importo per Ste">
                     </div>
                 </div>
 
                 <button type="submit">Aggiungi Spesa</button>
             </form>
         </div>
-
-        <h2>Elenco Spese</h2>
-        <div id="totalBalance"></div>
-
-        <table id="expenseTable">
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Descrizione</th>
-                    <th>Totale</th>
-                    <th>Jack (messo)</th>
-                    <th>Ste (messo)</th>
-                    <th>Jack (dovuto)</th>
-                    <th>Ste (dovuto)</th>
-                    <th>Azione</th>
-                </tr>
-            </thead>
-            <tbody id="expenseList"></tbody>
-        </table>
     </div>
-
-    <script src="app.js"></script>
 </body>
 </html>

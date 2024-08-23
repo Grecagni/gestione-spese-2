@@ -37,8 +37,10 @@
 <body>
     <h1>Gestione Spese</h1>
 
-    <!-- Pulsante per aggiungere una nuova spesa, nascosto di default -->
-    <button id="addExpenseBtn" class="add-btn" style="display: none;">Aggiungi Spesa</button>
+    <!-- Pulsante per aggiungere una nuova spesa, centrato sotto il titolo -->
+    <div class="button-container">
+        <button id="addExpenseBtn" class="add-btn">Aggiungi Spesa</button>
+    </div>
 
     <div id="auth-container"></div>
 
@@ -87,10 +89,10 @@
             </form>
         </div>
 
-        <!-- Sezione Elenco Spese e Saldo -->
+        <!-- Sezione Elenco Spese e Saldo, ora senza il riquadro -->
         <div id="expenseTableContainer">
             <h2>Elenco Spese</h2>
-            <div id="totalBalance"></div>
+            <div id="totalBalance" class="balance-text"></div>
             <table id="expenseTable">
                 <thead>
                     <tr>

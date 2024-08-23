@@ -38,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     <input type="email" id="email" placeholder="Email">
                     <input type="password" id="password" placeholder="Password">
                     <button onclick="login()">Login</button>
-                    <button onclick="signup()">Registrati</button>
                 </div>
             `;
             document.getElementById("content").style.display = "none";
@@ -146,25 +145,6 @@ function login() {
         .catch((error) => {
             console.error("Errore nel login: ", error);
             alert("Login fallito. Controlla le tue credenziali.");
-        });
-}
-
-// Funzione di registrazione
-function signup() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            // Registrazione riuscita
-            const user = userCredential.user;
-            document.getElementById("auth-container").style.display = "none";
-            document.getElementById("content").style.display = "block";
-            document.getElementById('addExpenseBtn').style.display = 'block';
-        })
-        .catch((error) => {
-            console.error("Errore nella registrazione: ", error);
-            alert("Registrazione fallita. Controlla le informazioni inserite.");
         });
 }
 

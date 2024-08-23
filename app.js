@@ -6,10 +6,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (addExpenseBtn) {
         addExpenseBtn.addEventListener('click', function() {
             const formContainer = document.getElementById('expenseFormContainer');
-            if (formContainer.style.display === 'none' || formContainer.style.display === '') {
-                formContainer.style.display = 'block';
-            } else {
-                formContainer.style.display = 'none';
+            if (formContainer) {
+                if (formContainer.style.display === 'none' || formContainer.style.display === '') {
+                    formContainer.style.display = 'block';
+                } else {
+                    formContainer.style.display = 'none';
+                }
             }
         });
     }
@@ -78,74 +80,77 @@ document.getElementById('splitType').addEventListener('change', function() {
     }
 });
 
-document.getElementById('expenseForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+const expenseForm = document.getElementById('expenseForm');
+if (expenseForm) {
+    expenseForm.addEventListener('submit', function(e) {
+        e.preventDefault();
 
-    const description = document.getElementById('description').value;
-    const date = document.getElementById('date').value;
-    const totalAmount = parseFloat(document.getElementById('totalAmount').value).toFixed(2);
-    
-    const jackAmount = parseFloat(document.getElementById('jackAmount').value).toFixed(2);
-    const steAmount = parseFloat(document.getElementById('steAmount').value).toFixed(2);
+        const description = document.getElementById('description').value;
+        const date = document.getElementById('date').value;
+        const totalAmount = parseFloat(document.getElementById('totalAmount').value).toFixed(2);
+        
+        const jackAmount = parseFloat(document.getElementById('jackAmount').value).toFixed(2);
+        const steAmount = parseFloat(document.getElementById('steAmount').value).toFixed(2);
 
-    // Controllo 1: La somma di chi ha messo cosa deve essere uguale al totale
-    if ((parseFloat(jackAmount) + parseFloat(steAmount)).toFixed(2) != totalAmount) {
-        alert("La somma di chi ha messo cosa deve essere uguale all'importo totale della spesa.");
-        return;
-    }
-
-    const splitType = document.getElementById('splitType').value;
-    let jackShare = 0;
-    let steShare = 0;
-
-    if (splitType === 'equally') {
-        jackShare = (totalAmount / 2).toFixed(2);
-        steShare = (totalAmount / 2).toFixed(2);
-    } else if (splitType === 'exact') {
-        jackShare = parseFloat(document.getElementById('jackSplit').value).toFixed(2);
-        steShare = parseFloat(document.getElementById('steSplit').value).toFixed(2);
-
-        // Controllo 2: La somma della divisione deve essere uguale al totale
-        if ((parseFloat(jackShare) + parseFloat(steShare)).toFixed(2) != totalAmount) {
-            alert("La somma della divisione spesa deve essere uguale all'importo totale della spesa.");
+        // Controllo 1: La somma di chi ha messo cosa deve essere uguale al totale
+        if ((parseFloat(jackAmount) + parseFloat(steAmount)).toFixed(2) != totalAmount) {
+            alert("La somma di chi ha messo cosa deve essere uguale all'importo totale della spesa.");
             return;
         }
-    }
 
-    const jackBalance = (jackShare - jackAmount).toFixed(2);
-    const steBalance = (steShare - steAmount).toFixed(2);
+        const splitType = document.getElementById('splitType').value;
+        let jackShare = 0;
+        let steShare = 0;
 
-    const expense = {
-        description,
-        date,
-        totalAmount: totalAmount,
-        jackAmount: jackAmount,
-        steAmount: steAmount,
-        jackShare: jackShare,
-        steShare: steShare,
-        jackBalance: jackBalance,
-        steBalance: steBalance,
-        userId: firebase.auth().currentUser.uid
-    };
+        if (splitType === 'equally') {
+            jackShare = (totalAmount / 2).toFixed(2);
+            steShare = (totalAmount / 2).toFixed(2);
+        } else if (splitType === 'exact') {
+            jackShare = parseFloat(document.getElementById('jackSplit').value).toFixed(2);
+            steShare = parseFloat(document.getElementById('steSplit').value).toFixed(2);
 
-    // Aggiungi la spesa a Firestore
-    db.collection("expenses").add(expense)
-        .then(() => {
-            displayExpenses();
-            document.getElementById('expenseFormContainer').style.display = 'none'; // Nascondi il form dopo l'inserimento
-        })
-        .catch((error) => {
-            console.error("Errore nell'aggiungere la spesa: ", error);
-        });
+            // Controllo 2: La somma della divisione deve essere uguale al totale
+            if ((parseFloat(jackShare) + parseFloat(steShare)).toFixed(2) != totalAmount) {
+                alert("La somma della divisione spesa deve essere uguale all'importo totale della spesa.");
+                return;
+            }
+        }
 
-    document.getElementById('description').value = '';
-    document.getElementById('date').value = '';
-    document.getElementById('totalAmount').value = '';
-    document.getElementById('jackAmount').value = '';
-    document.getElementById('steAmount').value = '';
-    document.getElementById('jackSplit').value = '';
-    document.getElementById('steSplit').value = '';
-});
+        const jackBalance = (jackShare - jackAmount).toFixed(2);
+        const steBalance = (steShare - steAmount).toFixed(2);
+
+        const expense = {
+            description,
+            date,
+            totalAmount: totalAmount,
+            jackAmount: jackAmount,
+            steAmount: steAmount,
+            jackShare: jackShare,
+            steShare: steShare,
+            jackBalance: jackBalance,
+            steBalance: steBalance,
+            userId: firebase.auth().currentUser.uid
+        };
+
+        // Aggiungi la spesa a Firestore
+        db.collection("expenses").add(expense)
+            .then(() => {
+                displayExpenses();
+                document.getElementById('expenseFormContainer').style.display = 'none'; // Nascondi il form dopo l'inserimento
+            })
+            .catch((error) => {
+                console.error("Errore nell'aggiungere la spesa: ", error);
+            });
+
+        document.getElementById('description').value = '';
+        document.getElementById('date').value = '';
+        document.getElementById('totalAmount').value = '';
+        document.getElementById('jackAmount').value = '';
+        document.getElementById('steAmount').value = '';
+        document.getElementById('jackSplit').value = '';
+        document.getElementById('steSplit').value = '';
+    });
+}
 
 function formatDate(dateString) {
     const options = { year: '2-digit', month: '2-digit', day: '2-digit' };

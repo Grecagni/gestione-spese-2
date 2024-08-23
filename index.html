@@ -13,10 +13,26 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <!-- Firebase Authentication -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="app.js"></script>
-
     <!-- Firebase Firestore -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <script>
+        // Configurazione di Firebase
+        var firebaseConfig = {
+            apiKey: "AIzaSyCKxmmLDDORX11T19MiTeC0Pja_wMSzAY0",
+            authDomain: "gestione-spese-8c075.firebaseapp.com",
+            projectId: "gestione-spese-8c075",
+            storageBucket: "gestione-spese-8c075.appspot.com",
+            messagingSenderId: "269032762670",
+            appId: "1:269032762670:web:245a1697435eb457671ebf",
+            measurementId: "G-VMQKRMNEYS"
+        };
+        // Inizializza Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+    </script>
+
+    <script src="app.js"></script>
 </head>
 <body>
     <h1>Gestione Spese</h1>

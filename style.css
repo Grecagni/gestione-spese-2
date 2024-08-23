@@ -75,7 +75,7 @@ th, td {
 }
 
 th {
-    background-color: #007aff;
+    background-color: #28a745;
     color: white;
     font-weight: 500;
     word-wrap: break-word;
@@ -96,6 +96,20 @@ td {
 
 .delete-btn:hover {
     background-color: #ff453a;
+}
+
+.add-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.add-btn:hover {
+    background-color: #218838;
 }
 
 #totalBalance {

@@ -50,6 +50,40 @@ h1 {
     margin: 0 auto; /* Centra il form */
 }
 
+#expenseFormContainer h2 {
+    margin-bottom: 20px;
+}
+
+#expenseForm input, #expenseForm select {
+    width: calc(100% - 20px);
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#expenseForm label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    text-align: left;
+}
+
+#expenseForm button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+#expenseForm button:hover {
+    background-color: #218838;
+}
+
 #expenseTableContainer {
     width: 80%;
     margin: 20px auto;

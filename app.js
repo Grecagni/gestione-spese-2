@@ -1,3 +1,32 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // Codice che verrà eseguito solo dopo che il DOM è stato completamente caricato
+
+    // Associa il listener di eventi al pulsante 'addExpenseBtn' solo dopo che il DOM è pronto
+    const addExpenseBtn = document.getElementById('addExpenseBtn');
+    if (addExpenseBtn) {
+        addExpenseBtn.addEventListener('click', function() {
+            const formContainer = document.getElementById('expenseFormContainer');
+            if (formContainer.style.display === 'none' || formContainer.style.display === '') {
+                formContainer.style.display = 'block';
+            } else {
+                formContainer.style.display = 'none';
+            }
+        });
+    }
+
+    // Resto del codice
+    // Imposta la data odierna come default nel formato yyyy-mm-dd
+    const today = new Date().toISOString().split('T')[0];
+    const dateInput = document.getElementById('date');
+
+    // Imposta il valore di default solo se l'input esiste
+    if (dateInput) {
+        dateInput.value = today;
+    }
+
+    displayExpenses();
+});
+
 // Firebase Authentication
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
@@ -37,16 +66,6 @@ function signup() {
             alert(error.message);
         });
 }
-
-// Mostra o nascondi il form di inserimento delle spese
-document.getElementById('addExpenseBtn').addEventListener('click', function() {
-    const formContainer = document.getElementById('expenseFormContainer');
-    if (formContainer.style.display === 'none' || formContainer.style.display === '') {
-        formContainer.style.display = 'block';
-    } else {
-        formContainer.style.display = 'none';
-    }
-});
 
 document.getElementById('splitType').addEventListener('change', function() {
     const splitType = this.value;
@@ -199,16 +218,3 @@ function deleteExpense(id) {
             console.error("Errore nell'eliminare la spesa: ", error);
         });
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Imposta la data odierna come default nel formato yyyy-mm-dd
-    const today = new Date().toISOString().split('T')[0];
-    const dateInput = document.getElementById('date');
-
-    // Imposta il valore di default solo se l'input esiste
-    if (dateInput) {
-        dateInput.value = today;
-    }
-
-    displayExpenses();
-});

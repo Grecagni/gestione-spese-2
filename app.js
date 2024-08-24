@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (document.getElementById('content-container')) {
                 document.getElementById('content-container').style.display = 'block';
             }
+            if (document.getElementById('navbar')) {
+                document.getElementById('navbar').style.display = 'block';
+            }
             const path = window.location.pathname;
             if (path.includes("index.html")) {
                 displayHomeContent();
@@ -36,6 +39,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             if (document.getElementById('content-container')) {
                 document.getElementById('content-container').style.display = 'none';
+            }
+            if (document.getElementById('navbar')) {
+                document.getElementById('navbar').style.display = 'none';
             }
         }
     });
@@ -81,8 +87,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 steShare = totalAmount / 2;
             } else {
                 // Logica per divisione esatta
-                jackShare = jackAmount; // Usato solo come esempio, potrebbe cambiare a seconda del tipo di divisione esatta
-                steShare = steAmount;   // Usato solo come esempio, potrebbe cambiare a seconda del tipo di divisione esatta
+                jackShare = parseFloat(document.getElementById('jackShare').value);
+                steShare = parseFloat(document.getElementById('steShare').value);
             }
 
             console.log("Dati raccolti dal form:", { description, date, totalAmount, jackAmount, steAmount, jackShare, steShare });

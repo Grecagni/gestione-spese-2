@@ -23,7 +23,7 @@ h1, h2 {
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
-    font-size: 0.75rem; /* Testo piccolo ridotto */
+    font-size: 0.5rem; /* Testo piccolo ridotto */
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -32,7 +32,7 @@ h1, h2 {
     text-align: center;
     border: 1px solid #A5D6A7; /* Bordi chiari per le celle */
     white-space: nowrap; /* Adatta la cella al contenuto */
-    font-size: 0.75rem; /* Assicurati che la dimensione del testo sia ridotta anche nelle celle */
+    font-size: 0.4rem; /* Assicurati che la dimensione del testo sia ridotta anche nelle celle */
 }
 
 #expenseTable th {

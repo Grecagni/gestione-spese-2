@@ -13,15 +13,17 @@
 
     <!-- CSS Personalizzato -->
     <link rel="stylesheet" href="/gestione-spese-2/style.css">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- Firebase e librerie -->
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <!-- Configurazione Firebase -->
     <script>
-        // Configurazione Firebase
         var firebaseConfig = {
             apiKey: "AIzaSyA6usjd2E5ytJz8Mx9SqjQXGXPgnOAeqYw",
             authDomain: "gestione-spese-2-5db43.firebaseapp.com",
@@ -33,8 +35,6 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
     </script>
-
-    <script src="/gestione-spese-2/app.js"></script>
 </head>
 <body>
     <div class="container">
@@ -57,5 +57,8 @@
             <a class="navbar-brand" href="/gestione-spese-2/expenses.html">Spese</a>
         </div>
     </nav>
+
+    <!-- Caricamento di app.js DOPO Firebase -->
+    <script src="/gestione-spese-2/app.js"></script>
 </body>
 </html>

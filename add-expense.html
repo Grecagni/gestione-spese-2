@@ -62,12 +62,12 @@
             
             if ((jackAmount + steAmount) !== totalAmount) {
                 alert('La somma degli importi messi da Jack e Ste non corrisponde al totale della spesa.');
-                return false;
+                return false; // Blocca l'inserimento
             }
 
             if (document.getElementById('splitType').value === 'exact' && (jackShare + steShare) !== totalAmount) {
                 alert('La somma degli importi dovuti da Jack e Ste non corrisponde al totale della spesa.');
-                return false;
+                return false; // Blocca l'inserimento
             }
 
             return true;

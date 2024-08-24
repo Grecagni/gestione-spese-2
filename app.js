@@ -56,11 +56,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const description = document.getElementById('description').value;
             const date = document.getElementById('date').value;
-            const totalAmount = document.getElementById('totalAmount').value;
-            const jackAmount = document.getElementById('jackAmount').value;
-            const steAmount = document.getElementById('steAmount').value;
-            const jackShare = jackAmount;
-            const steShare = steAmount;
+            const totalAmount = parseFloat(document.getElementById('totalAmount').value);
+            const jackAmount = parseFloat(document.getElementById('jackAmount').value);
+            const steAmount = parseFloat(document.getElementById('steAmount').value);
+            const jackShare = parseFloat(jackAmount);
+            const steShare = parseFloat(steAmount);
 
             console.log("Dati raccolti dal form:", { description, date, totalAmount, jackAmount, steAmount, jackShare, steShare });
 

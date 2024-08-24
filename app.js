@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
+    console.log(firebase.apps.length ? "Firebase è stato inizializzato" : "Firebase NON è stato inizializzato");
+
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/gestione-spese-2/service-worker.js')
@@ -13,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
+            console.log("Utente autenticato:", user);
             const path = window.location.pathname;
             if (path.includes("index.html")) {
                 displayHomeContent();
@@ -20,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 displayExpenses();
             }
         } else {
-            // Gestisci la visualizzazione del form di login o simile qui
+            console.log("Nessun utente autenticato.");
         }
     });
 });
@@ -90,10 +93,14 @@ function displayExpenses() {
     const expenseList = document.getElementById('expenseList');
     
     db.collection("expenses").orderBy("date", "desc").onSnapshot((querySnapshot) => {
+        console.log("Documenti recuperati:", querySnapshot.docs.length); // Debug
+
         expenseList.innerHTML = '';
 
         querySnapshot.forEach((doc) => {
             const expense = doc.data();
+            console.log(expense); // Debug
+
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${formatDate(expense.date)}</td>

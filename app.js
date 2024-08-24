@@ -13,26 +13,24 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Aggiungo un ritardo per assicurarmi che Firebase abbia caricato correttamente
-    setTimeout(function() {
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                console.log("Utente autenticato:", user);
-                document.getElementById('login-container').style.display = 'none';
-                document.getElementById('content-container').style.display = 'block';
-                const path = window.location.pathname;
-                if (path.includes("index.html")) {
-                    displayHomeContent();
-                } else if (path.includes("expenses.html")) {
-                    displayExpenses();
-                }
-            } else {
-                console.log("Nessun utente autenticato.");
-                document.getElementById('login-container').style.display = 'block';
-                document.getElementById('content-container').style.display = 'none';
+    // Gestione autenticazione
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            console.log("Utente autenticato:", user);
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('content-container').style.display = 'block';
+            const path = window.location.pathname;
+            if (path.includes("index.html")) {
+                displayHomeContent();
+            } else if (path.includes("expenses.html")) {
+                displayExpenses();
             }
-        });
-    }, 1000); // Aspetta 1 secondo per assicurarsi che Firebase sia pronto
+        } else {
+            console.log("Nessun utente autenticato.");
+            document.getElementById('login-container').style.display = 'block';
+            document.getElementById('content-container').style.display = 'none';
+        }
+    });
 
     // Gestione login
     document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -49,6 +47,41 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert("Credenziali non valide. Riprova.");
             });
     });
+
+    // Gestione aggiunta spesa
+    const expenseForm = document.getElementById('expenseForm');
+    if (expenseForm) {
+        expenseForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const description = document.getElementById('description').value;
+            const date = document.getElementById('date').value;
+            const totalAmount = document.getElementById('totalAmount').value;
+            const jackAmount = document.getElementById('jackAmount').value;
+            const steAmount = document.getElementById('steAmount').value;
+            const jackShare = jackAmount;
+            const steShare = steAmount;
+
+            console.log("Dati raccolti dal form:", { description, date, totalAmount, jackAmount, steAmount, jackShare, steShare });
+
+            db.collection("expenses").add({
+                description,
+                date,
+                totalAmount,
+                jackAmount,
+                steAmount,
+                jackShare,
+                steShare
+            })
+            .then(function() {
+                console.log("Spesa aggiunta con successo!");
+                window.location.href = '/gestione-spese-2/expenses.html';
+            })
+            .catch(function(error) {
+                console.error("Errore durante l'aggiunta della spesa:", error);
+            });
+        });
+    }
 });
 
 function displayHomeContent() {
@@ -116,13 +149,13 @@ function displayExpenses() {
     const expenseList = document.getElementById('expenseList');
     
     db.collection("expenses").orderBy("date", "desc").onSnapshot((querySnapshot) => {
-        console.log("Documenti recuperati:", querySnapshot.docs.length);
+        console.log("Documenti recuperati:", querySnapshot.docs.length); // Debug
 
-        expenseList.innerHTML = '';
+        expenseList.innerHTML = ''; // Assicurati che la tabella sia svuotata prima di riempirla
 
         querySnapshot.forEach((doc) => {
             const expense = doc.data();
-            console.log(expense);
+            console.log(expense); // Debug
 
             const row = document.createElement('tr');
             row.innerHTML = `
@@ -157,7 +190,7 @@ function deleteExpense(id) {
 }
 
 function formatDate(dateString) {
-    const options = { year: '2-digit', month: '2-digit', day: '2-digit' };
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
     const date = new Date(dateString);
     return date.toLocaleDateString('it-IT', options);
 }

@@ -23,20 +23,22 @@ h1, h2 {
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
-    font-size: 0.875rem; /* Testo piccolo */
+    font-size: 0.75rem; /* Testo piccolo ridotto */
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
 }
 
 #expenseTable th, #expenseTable td {
-    padding: 8px; /* Ridotto per adattarsi meglio */
+    padding: 4px; /* Ridotto per adattarsi meglio */
     text-align: center;
-    border: 1px solid #4CAF50;
+    border: 1px solid #A5D6A7; /* Bordi chiari per le celle */
     white-space: nowrap; /* Adatta la cella al contenuto */
+    font-size: 0.75rem; /* Assicurati che la dimensione del testo sia ridotta anche nelle celle */
 }
 
 #expenseTable th {
-    background-color: #4CAF50;
+    background-color: #4CAF50; /* Verde per l'intestazione */
     color: white;
+    border: 1px solid #388E3C; /* Verde scuro per il bordo dell'intestazione */
     font-weight: bold;
 }
 

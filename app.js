@@ -118,10 +118,11 @@ function displayHomeContent() {
                 recentExpensesList.appendChild(listItem);
             }
 
-            totalJackMesso += parseFloat(expense.jackAmount);
-            totalSteMesso += parseFloat(expense.steAmount);
-            totalJackDovuto += parseFloat(expense.jackShare);
-            totalSteDovuto += parseFloat(expense.steShare);
+            // Convertire esplicitamente i valori in numeri
+            totalJackMesso += parseFloat(expense.jackAmount) || 0;
+            totalSteMesso += parseFloat(expense.steAmount) || 0;
+            totalJackDovuto += parseFloat(expense.jackShare) || 0;
+            totalSteDovuto += parseFloat(expense.steShare) || 0;
         });
 
         const saldoJack = totalJackMesso - totalJackDovuto;

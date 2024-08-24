@@ -70,8 +70,20 @@ document.addEventListener('DOMContentLoaded', function() {
             const totalAmount = parseFloat(document.getElementById('totalAmount').value);
             const jackAmount = parseFloat(document.getElementById('jackAmount').value);
             const steAmount = parseFloat(document.getElementById('steAmount').value);
-            const jackShare = parseFloat(jackAmount);
-            const steShare = parseFloat(steAmount);
+
+            let jackShare, steShare;
+
+            const splitType = document.getElementById('splitType').value;
+
+            if (splitType === 'equally') {
+                // Divisione equa: dividiamo il totale a metà per ciascuno
+                jackShare = totalAmount / 2;
+                steShare = totalAmount / 2;
+            } else {
+                // Logica per divisione esatta
+                jackShare = jackAmount; // Usato solo come esempio, potrebbe cambiare a seconda del tipo di divisione esatta
+                steShare = steAmount;   // Usato solo come esempio, potrebbe cambiare a seconda del tipo di divisione esatta
+            }
 
             console.log("Dati raccolti dal form:", { description, date, totalAmount, jackAmount, steAmount, jackShare, steShare });
 
@@ -100,10 +112,10 @@ function displayHomeContent() {
     const totalBalanceDiv = document.getElementById('totalBalance');
     
     db.collection("expenses").orderBy("date", "desc").limit(5).get().then((querySnapshot) => {
-        let totalJackMesso = 0;
-        let totalSteMesso = 0;
-        let totalJackDovuto = 0;
-        let totalSteDovuto = 0;
+        let totalJackMesso = 0; // Quanto Jack ha messo
+        let totalSteMesso = 0; // Quanto Ste ha messo
+        let totalJackDovuto = 0; // Quanto Jack doveva mettere
+        let totalSteDovuto = 0; // Quanto Ste doveva mettere
 
         if (recentExpensesList) {
             recentExpensesList.innerHTML = '';
@@ -118,13 +130,13 @@ function displayHomeContent() {
                 recentExpensesList.appendChild(listItem);
             }
 
-            // Convertire esplicitamente i valori in numeri
-            totalJackMesso += parseFloat(expense.jackAmount) || 0;
-            totalSteMesso += parseFloat(expense.steAmount) || 0;
-            totalJackDovuto += parseFloat(expense.jackShare) || 0;
-            totalSteDovuto += parseFloat(expense.steShare) || 0;
+            totalJackMesso += parseFloat(expense.jackAmount);
+            totalSteMesso += parseFloat(expense.steAmount);
+            totalJackDovuto += parseFloat(expense.jackShare);
+            totalSteDovuto += parseFloat(expense.steShare);
         });
 
+        // Calcolo del saldo per Jack e Ste
         const saldoJack = totalJackMesso - totalJackDovuto;
         let balanceText = '';
 

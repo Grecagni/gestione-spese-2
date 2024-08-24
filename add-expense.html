@@ -98,5 +98,39 @@
 
     <!-- Caricamento di app.js DOPO Firebase -->
     <script src="/gestione-spese-2/app.js"></script>
+
+    <!-- Debug JS per aggiunta spesa -->
+    <script>
+    document.getElementById('expenseForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const description = document.getElementById('description').value;
+        const date = document.getElementById('date').value;
+        const totalAmount = document.getElementById('totalAmount').value;
+        const jackAmount = document.getElementById('jackAmount').value;
+        const steAmount = document.getElementById('steAmount').value;
+        const jackShare = jackAmount;
+        const steShare = steAmount;
+
+        console.log("Dati raccolti dal form:", { description, date, totalAmount, jackAmount, steAmount, jackShare, steShare });
+
+        db.collection("expenses").add({
+            description,
+            date,
+            totalAmount,
+            jackAmount,
+            steAmount,
+            jackShare,
+            steShare
+        })
+        .then(function() {
+            console.log("Spesa aggiunta con successo!");
+            window.location.href = '/gestione-spese-2/expenses.html';
+        })
+        .catch(function(error) {
+            console.error("Errore durante l'aggiunta della spesa:", error);
+        });
+    });
+    </script>
 </body>
 </html>

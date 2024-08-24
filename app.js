@@ -128,13 +128,13 @@ function displayExpenses() {
     const expenseList = document.getElementById('expenseList');
     
     db.collection("expenses").orderBy("date", "desc").onSnapshot((querySnapshot) => {
-        console.log("Documenti recuperati:", querySnapshot.docs.length); // Debug
+        console.log("Documenti recuperati:", querySnapshot.docs.length);
 
-        expenseList.innerHTML = ''; // Assicurati che la tabella sia svuotata prima di riempirla
+        expenseList.innerHTML = '';
 
         querySnapshot.forEach((doc) => {
             const expense = doc.data();
-            console.log(expense); // Debug
+            console.log(expense);
 
             const row = document.createElement('tr');
             row.innerHTML = `

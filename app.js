@@ -109,39 +109,18 @@ function displayHomeContent() {
             totalSteDovuto += parseFloat(expense.steShare);
         });
 
-        const jackBalance = totalJackMesso - totalJackDovuto;
+        const saldoJack = totalJackMesso - totalJackDovuto;
         let balanceText = '';
 
-        if (jackBalance > 0) {
-            balanceText = `Ste deve dare a Jack: €${jackBalance.toFixed(2)}`;
-        } else if (jackBalance < 0) {
-            balanceText = `Jack deve dare a Ste: €${Math.abs(jackBalance).toFixed(2)}`;
+        if (saldoJack > 0) {
+            balanceText = `Ste deve dare a Jack: €${saldoJack.toFixed(2)}`;
+        } else if (saldoJack < 0) {
+            balanceText = `Jack deve dare a Ste: €${Math.abs(saldoJack).toFixed(2)}`;
         } else {
             balanceText = `Jack e Ste sono pari.`;
         }
 
         totalBalanceDiv.textContent = balanceText;
-
-        generateSummaryChart(totalJackMesso, totalSteMesso);
-    });
-}
-
-function generateSummaryChart(totalJackMesso, totalSteMesso) {
-    const ctx = document.getElementById('expenseSummaryChart').getContext('2d');
-
-    new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Jack', 'Ste'],
-            datasets: [{
-                data: [totalJackMesso, totalSteMesso],
-                backgroundColor: ['#007bff', '#ffc107']
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-        }
     });
 }
 

@@ -17,8 +17,12 @@ document.addEventListener('DOMContentLoaded', function() {
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             console.log("Utente autenticato:", user);
-            document.getElementById('login-container').style.display = 'none';
-            document.getElementById('content-container').style.display = 'block';
+            if (document.getElementById('login-container')) {
+                document.getElementById('login-container').style.display = 'none';
+            }
+            if (document.getElementById('content-container')) {
+                document.getElementById('content-container').style.display = 'block';
+            }
             const path = window.location.pathname;
             if (path.includes("index.html")) {
                 displayHomeContent();
@@ -27,26 +31,33 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } else {
             console.log("Nessun utente autenticato.");
-            document.getElementById('login-container').style.display = 'block';
-            document.getElementById('content-container').style.display = 'none';
+            if (document.getElementById('login-container')) {
+                document.getElementById('login-container').style.display = 'block';
+            }
+            if (document.getElementById('content-container')) {
+                document.getElementById('content-container').style.display = 'none';
+            }
         }
     });
 
     // Gestione login
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
 
-        firebase.auth().signInWithEmailAndPassword(email, password)
-            .then((userCredential) => {
-                console.log("Login avvenuto con successo:", userCredential.user);
-            })
-            .catch((error) => {
-                console.error("Errore durante il login:", error);
-                alert("Credenziali non valide. Riprova.");
-            });
-    });
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    console.log("Login avvenuto con successo:", userCredential.user);
+                })
+                .catch((error) => {
+                    console.error("Errore durante il login:", error);
+                    alert("Credenziali non valide. Riprova.");
+                });
+        });
+    }
 
     // Gestione aggiunta spesa
     const expenseForm = document.getElementById('expenseForm');
@@ -94,14 +105,18 @@ function displayHomeContent() {
         let totalJackDovuto = 0;
         let totalSteDovuto = 0;
 
-        recentExpensesList.innerHTML = '';
+        if (recentExpensesList) {
+            recentExpensesList.innerHTML = '';
+        }
 
         querySnapshot.forEach((doc) => {
             const expense = doc.data();
             const listItem = document.createElement('li');
             listItem.className = 'list-group-item';
             listItem.textContent = `${formatDate(expense.date)} - ${expense.description}: €${parseFloat(expense.totalAmount).toFixed(2)}`;
-            recentExpensesList.appendChild(listItem);
+            if (recentExpensesList) {
+                recentExpensesList.appendChild(listItem);
+            }
 
             totalJackMesso += parseFloat(expense.jackAmount);
             totalSteMesso += parseFloat(expense.steAmount);
@@ -120,7 +135,9 @@ function displayHomeContent() {
             balanceText = `Jack e Ste sono pari.`;
         }
 
-        totalBalanceDiv.textContent = balanceText;
+        if (totalBalanceDiv) {
+            totalBalanceDiv.textContent = balanceText;
+        }
     });
 }
 
@@ -130,7 +147,9 @@ function displayExpenses() {
     db.collection("expenses").orderBy("date", "desc").onSnapshot((querySnapshot) => {
         console.log("Documenti recuperati:", querySnapshot.docs.length);
 
-        expenseList.innerHTML = '';
+        if (expenseList) {
+            expenseList.innerHTML = '';
+        }
 
         querySnapshot.forEach((doc) => {
             const expense = doc.data();
@@ -147,7 +166,9 @@ function displayExpenses() {
                 <td>€${parseFloat(expense.steShare).toFixed(2)}</td>
                 <td><button class="btn btn-danger" onclick="confirmDeleteExpense('${doc.id}')">Elimina</button></td>
             `;
-            expenseList.appendChild(row);
+            if (expenseList) {
+                expenseList.appendChild(row);
+            }
         });
     });
 }

@@ -39,14 +39,28 @@
 <body>
     <div class="container">
         <h1 class="text-center my-4">Gestione Spese</h1>
-        <h2>Saldo Finale</h2>
-        <div id="totalBalance" class="balance-text mb-4"></div>
 
-        <h2>Ultime Spese</h2>
-        <ul id="recentExpenses" class="list-group mb-4"></ul>
+        <!-- Area login -->
+        <div id="login-container" style="display: none;">
+            <h2>Accedi</h2>
+            <form id="loginForm">
+                <input type="email" id="loginEmail" class="form-control mb-3" placeholder="Email" required>
+                <input type="password" id="loginPassword" class="form-control mb-3" placeholder="Password" required>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+        </div>
 
-        <h2>Riepilogo Spese</h2>
-        <canvas id="expenseSummaryChart" width="400" height="200"></canvas>
+        <!-- Area contenuti visibili solo dopo il login -->
+        <div id="content-container" style="display: none;">
+            <h2>Saldo Finale</h2>
+            <div id="totalBalance" class="balance-text mb-4"></div>
+
+            <h2>Ultime Spese</h2>
+            <ul id="recentExpenses" class="list-group mb-4"></ul>
+
+            <h2>Riepilogo Spese</h2>
+            <canvas id="expenseSummaryChart" width="400" height="200"></canvas>
+        </div>
     </div>
 
     <!-- Barra di navigazione -->

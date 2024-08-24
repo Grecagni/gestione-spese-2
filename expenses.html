@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Spese - Spese</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS Personalizzato -->
+    <link rel="stylesheet" href="style.css">
+
+    <script src="app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2 class="my-4">Elenco Spese</h2>
+        <div id="totalBalance" class="balance-text"></div>
+
+        <table id="expenseTable" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Descrizione</th>
+                    <th>Totale</th>
+                    <th>Jack (messo)</th>
+                    <th>Ste (messo)</th>
+                    <th>Jack (dovuto)</th>
+                    <th>Ste (dovuto)</th>
+                    <th>Azione</th>
+                </tr>
+            </thead>
+            <tbody id="expenseList"></tbody>
+        </table>
+
+        <h2 class="my-4">Statistiche delle Spese</h2>
+        <canvas id="expenseChart" width="400" height="200"></canvas>
+    </div>
+
+    <!-- Barra di navigazione -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-bottom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Home</a>
+            <a class="navbar-brand" href="expenses.html">Spese</a>
+            <a class="navbar-brand" href="settings.html">Impostazioni</a>
+        </div>
+    </nav>
+</body>
+</html>

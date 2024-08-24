@@ -13,9 +13,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Gestione autenticazione
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             console.log("Utente autenticato:", user);
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('content-container').style.display = 'block';
             const path = window.location.pathname;
             if (path.includes("index.html")) {
                 displayHomeContent();
@@ -24,7 +27,25 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } else {
             console.log("Nessun utente autenticato.");
+            document.getElementById('login-container').style.display = 'block';
+            document.getElementById('content-container').style.display = 'none';
         }
+    });
+
+    // Gestione login
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                console.log("Login avvenuto con successo:", userCredential.user);
+            })
+            .catch((error) => {
+                console.error("Errore durante il login:", error);
+                alert("Credenziali non valide. Riprova.");
+            });
     });
 });
 
@@ -93,13 +114,13 @@ function displayExpenses() {
     const expenseList = document.getElementById('expenseList');
     
     db.collection("expenses").orderBy("date", "desc").onSnapshot((querySnapshot) => {
-        console.log("Documenti recuperati:", querySnapshot.docs.length); // Debug
+        console.log("Documenti recuperati:", querySnapshot.docs.length);
 
         expenseList.innerHTML = '';
 
         querySnapshot.forEach((doc) => {
             const expense = doc.data();
-            console.log(expense); // Debug
+            console.log(expense);
 
             const row = document.createElement('tr');
             row.innerHTML = `

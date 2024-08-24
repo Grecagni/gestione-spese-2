@@ -30,6 +30,26 @@ h1, h2 {
     color: white;
 }
 
+.table th,
+.table td {
+    font-size: 12px; /* Riduci la dimensione del testo */
+    padding: 8px;    /* Riduci il padding */
+    text-align: center;
+}
+
+.table th[colspan="2"] {
+    text-align: center;
+}
+
+.table th[rowspan="2"],
+.table th[colspan="2"] {
+    vertical-align: middle;
+}
+
+.list-group-item {
+    text-align: left;
+}
+
 .delete-btn {
     background-color: #ff3b30;
     color: white;

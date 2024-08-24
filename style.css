@@ -23,16 +23,16 @@ h1, h2 {
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
-    font-size: 0.5rem; /* Testo piccolo ridotto */
+    font-size: 0.75rem; /* Testo piccolo ridotto */
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
 }
 
 #expenseTable th, #expenseTable td {
-    padding: 2px; /* Ridotto per adattarsi meglio */
+    padding: 4px; /* Ridotto per adattarsi meglio */
     text-align: center;
     border: 1px solid #A5D6A7; /* Bordi chiari per le celle */
     white-space: nowrap; /* Adatta la cella al contenuto */
-    font-size: 0.5rem; /* Assicurati che la dimensione del testo sia ridotta anche nelle celle */
+    font-size: 0.75rem; /* Assicurati che la dimensione del testo sia ridotta anche nelle celle */
 }
 
 #expenseTable th {
@@ -50,20 +50,20 @@ h1, h2 {
     background-color: #e6ffe6;
 }
 
-/* Riduci la dimensione del pulsante Elimina */
-.btn-delete {
-    padding: 1px 1px; /* Riduci il padding interno per rendere il pulsante più piccolo */
-    font-size: 0.5rem; /* Assicurati che la dimensione del testo sia la stessa della tabella */
-    line-height: 1; /* Riduci l'altezza della linea per rendere il pulsante più compatto */
-    border-radius: 1px; /* Bordo arrotondato più piccolo */
-    background-color: #dc3545; /* Colore rosso per il pulsante Elimina */
-    color: white; /* Colore del testo */
-    border: none; /* Rimuove il bordo del pulsante per un aspetto più pulito */
-    cursor: pointer; /* Cambia il cursore quando si passa sopra il pulsante */
+/* Riduci la dimensione del pulsante X */
+#expenseTable .btn-delete {
+    padding: 2px 5px !important; /* Riduci il padding per un pulsante compatto */
+    font-size: 0.75rem !important; /* Assicura una dimensione del testo ridotta */
+    line-height: 1 !important; /* Riduci l'altezza della linea */
+    border-radius: 3px !important; /* Bordo arrotondato piccolo */
+    background-color: #dc3545 !important; /* Colore rosso per il pulsante */
+    color: white !important; /* Colore del testo bianco */
+    border: none !important; /* Nessun bordo */
+    cursor: pointer !important; /* Cambia il cursore su hover */
 }
 
-.btn-delete:hover {
-    background-color: #c82333; /* Cambia il colore quando si passa sopra il pulsante */
+#expenseTable .btn-delete:hover {
+    background-color: #c82333 !important; /* Colore diverso su hover */
 }
 
 /* Stili per i pulsanti */

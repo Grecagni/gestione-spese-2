@@ -2,8 +2,8 @@ const CACHE_NAME = "spese-cache-v1";
 const urlsToCache = [
     "/gestione-spese-2/",
     "/gestione-spese-2/index.html",
+    "/gestione-spese-2/add-expense.html",
     "/gestione-spese-2/expenses.html",
-    "/gestione-spese-2/settings.html",
     "/gestione-spese-2/style.css",
     "/gestione-spese-2/app.js",
     "/gestione-spese-2/manifest.json",

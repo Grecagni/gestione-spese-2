@@ -32,6 +32,24 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
     </script>
+    <script>
+        // Funzione per mostrare o nascondere i campi "Dovuto da Jack" e "Dovuto da Ste"
+        function toggleSplitDetails() {
+            const splitType = document.getElementById('splitType').value;
+            const splitDetails = document.getElementById('splitDetails');
+            if (splitType === 'equally') {
+                splitDetails.style.display = 'none';
+            } else {
+                splitDetails.style.display = 'block';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inizialmente nasconde i campi "Dovuto da Jack" e "Dovuto da Ste"
+            toggleSplitDetails();
+            // Aggiunge un listener per la modifica della selezione del tipo di divisione
+            document.getElementById('splitType').addEventListener('change', toggleSplitDetails);
+        });
+    </script>
 </head>
 <body>
     <div class="container">

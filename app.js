@@ -13,49 +13,42 @@ document.addEventListener('DOMContentLoaded', function() {
 
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-            displayExpenses();
+            const path = window.location.pathname;
+            if (path.includes("index.html")) {
+                displayHomeContent();
+            } else if (path.includes("expenses.html")) {
+                displayExpenses();
+            }
         } else {
             // Gestisci la visualizzazione del form di login o simile qui
         }
     });
 });
 
-function displayExpenses() {
-    const expenseList = document.getElementById('expenseList');
+function displayHomeContent() {
+    const recentExpensesList = document.getElementById('recentExpenses');
+    const totalBalanceDiv = document.getElementById('totalBalance');
     
-    db.collection("expenses").orderBy("date", "desc").onSnapshot((querySnapshot) => {
-        expenseList.innerHTML = '';
-
-        let expenses = [];
+    db.collection("expenses").orderBy("date", "desc").limit(5).get().then((querySnapshot) => {
         let totalJackMesso = 0;
         let totalSteMesso = 0;
         let totalJackDovuto = 0;
         let totalSteDovuto = 0;
 
+        recentExpensesList.innerHTML = '';
+
         querySnapshot.forEach((doc) => {
             const expense = doc.data();
-            expenses.push(expense);
-            
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${formatDate(expense.date)}</td>
-                <td>${expense.description}</td>
-                <td>€${parseFloat(expense.totalAmount).toFixed(2)}</td>
-                <td>€${parseFloat(expense.jackAmount).toFixed(2)}</td>
-                <td>€${parseFloat(expense.steAmount).toFixed(2)}</td>
-                <td>€${parseFloat(expense.jackShare).toFixed(2)}</td>
-                <td>€${parseFloat(expense.steShare).toFixed(2)}</td>
-                <td><button class="btn btn-danger" onclick="confirmDeleteExpense('${doc.id}')">Elimina</button></td>
-            `;
-            expenseList.appendChild(row);
+            const listItem = document.createElement('li');
+            listItem.className = 'list-group-item';
+            listItem.textContent = `${formatDate(expense.date)} - ${expense.description}: €${parseFloat(expense.totalAmount).toFixed(2)}`;
+            recentExpensesList.appendChild(listItem);
 
             totalJackMesso += parseFloat(expense.jackAmount);
             totalSteMesso += parseFloat(expense.steAmount);
             totalJackDovuto += parseFloat(expense.jackShare);
             totalSteDovuto += parseFloat(expense.steShare);
         });
-
-        $('#expenseTable').DataTable();
 
         const jackBalance = totalJackMesso - totalJackDovuto;
         let balanceText = '';
@@ -68,44 +61,52 @@ function displayExpenses() {
             balanceText = `Jack e Ste sono pari.`;
         }
 
-        document.getElementById('totalBalance').textContent = balanceText;
+        totalBalanceDiv.textContent = balanceText;
 
-        generateChart(expenses);
+        generateSummaryChart(totalJackMesso, totalSteMesso);
     });
 }
 
-function generateChart(expenses) {
-    const ctx = document.getElementById('expenseChart').getContext('2d');
-    const labels = expenses.map(expense => formatDate(expense.date));
-    const dataJack = expenses.map(expense => parseFloat(expense.jackAmount));
-    const dataSte = expenses.map(expense => parseFloat(expense.steAmount));
+function generateSummaryChart(totalJackMesso, totalSteMesso) {
+    const ctx = document.getElementById('expenseSummaryChart').getContext('2d');
 
     new Chart(ctx, {
-        type: 'bar',
+        type: 'pie',
         data: {
-            labels: labels,
+            labels: ['Jack', 'Ste'],
             datasets: [{
-                label: 'Spese di Jack',
-                data: dataJack,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            },
-            {
-                label: 'Spese di Ste',
-                data: dataSte,
-                backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                borderColor: 'rgba(153, 102, 255, 1)',
-                borderWidth: 1
+                data: [totalJackMesso, totalSteMesso],
+                backgroundColor: ['#007bff', '#ffc107']
             }]
         },
         options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
+            responsive: true,
+            maintainAspectRatio: false,
         }
+    });
+}
+
+function displayExpenses() {
+    const expenseList = document.getElementById('expenseList');
+    
+    db.collection("expenses").orderBy("date", "desc").onSnapshot((querySnapshot) => {
+        expenseList.innerHTML = '';
+
+        querySnapshot.forEach((doc) => {
+            const expense = doc.data();
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${formatDate(expense.date)}</td>
+                <td>${expense.description}</td>
+                <td>€${parseFloat(expense.totalAmount).toFixed(2)}</td>
+                <td>€${parseFloat(expense.jackAmount).toFixed(2)}</td>
+                <td>€${parseFloat(expense.steAmount).toFixed(2)}</td>
+                <td>€${parseFloat(expense.jackShare).toFixed(2)}</td>
+                <td>€${parseFloat(expense.steShare).toFixed(2)}</td>
+                <td><button class="btn btn-danger" onclick="confirmDeleteExpense('${doc.id}')">Elimina</button></td>
+            `;
+            expenseList.appendChild(row);
+        });
     });
 }
 
@@ -123,4 +124,10 @@ function deleteExpense(id) {
         .catch((error) => {
             console.error("Errore nell'eliminare la spesa: ", error);
         });
+}
+
+function formatDate(dateString) {
+    const options = { year: '2-digit', month: '2-digit', day: '2-digit' };
+    const date = new Date(dateString);
+    return date.toLocaleDateString('it-IT', options);
 }

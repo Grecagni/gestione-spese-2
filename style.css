@@ -1,47 +1,51 @@
-/* CSS per la riduzione delle dimensioni delle celle e applicazione del colore verde */
-
-/* Riduci la dimensione delle celle della tabella */
-#expenseTable th, #expenseTable td {
-    padding: 4px; /* Riduci il padding per restringere le celle */
-    font-size: 12px; /* Riduci la dimensione del font */
-    text-align: center; /* Centra il testo */
-}
-
-/* Applica il colore verde all'intestazione */
-#expenseTable thead {
-    background-color: #4CAF50; /* Colore verde non troppo brillante */
-    color: white;
-}
-
-/* Applica un bordo verde alle celle */
-#expenseTable th, #expenseTable td {
-    border: 1px solid #4CAF50; /* Bordo verde */
-}
-
-/* Applica un colore di sfondo leggermente verde alle righe pari per migliorare la leggibilità */
-#expenseTable tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-#expenseTable tbody tr:nth-child(odd) {
-    background-color: #e6ffe6; /* Colore verde molto chiaro */
-}
-
-/* Stili per il resto dell'applicazione */
+/* Stile Moderno per la Tabella e il Testo */
 
 /* Generale */
 body {
-    font-family: Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
 }
 
 h1, h2 {
     color: #007bff;
+    font-weight: 600;
 }
 
 .container {
     max-width: 100%;
     padding: 15px;
+}
+
+/* Stili per la tabella */
+#expenseTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.875rem; /* Testo piccolo */
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+}
+
+#expenseTable th, #expenseTable td {
+    padding: 8px; /* Ridotto per adattarsi meglio */
+    text-align: center;
+    border: 1px solid #4CAF50;
+    white-space: nowrap; /* Adatta la cella al contenuto */
+}
+
+#expenseTable th {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+#expenseTable tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#expenseTable tbody tr:nth-child(odd) {
+    background-color: #e6ffe6;
 }
 
 /* Stili per i pulsanti */
@@ -55,22 +59,47 @@ h1, h2 {
     border-color: #dc3545;
 }
 
-/* Stili per i form */
-.form-control {
-    margin-bottom: 10px;
-}
-
 /* Stili per la navbar */
 .navbar {
     background-color: #f8f9fa;
+    box-shadow: 0 -2px 3px rgba(0, 0, 0, 0.1);
 }
 
 .navbar .navbar-brand {
     color: #007bff;
+    font-weight: 600;
+    font-size: 0.9rem;
 }
 
 .navbar .navbar-brand:hover {
     color: #0056b3;
+}
+
+/* Migliora il testo della situazione finanziaria nella home */
+#totalBalance {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #28a745;
+}
+
+/* Stili per le ultime spese */
+#recentExpenses {
+    list-style-type: none;
+    padding: 0;
+}
+
+#recentExpenses li {
+    background-color: #ffffff;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    font-size: 0.9rem;
+}
+
+#recentExpenses li span {
+    font-weight: bold;
+    color: #007bff;
 }
 
 /* Nascondi i campi esatti di default (gestito in JavaScript) */

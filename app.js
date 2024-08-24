@@ -13,24 +13,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Gestione autenticazione
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-            console.log("Utente autenticato:", user);
-            document.getElementById('login-container').style.display = 'none';
-            document.getElementById('content-container').style.display = 'block';
-            const path = window.location.pathname;
-            if (path.includes("index.html")) {
-                displayHomeContent();
-            } else if (path.includes("expenses.html")) {
-                displayExpenses();
+    // Aggiungo un ritardo per assicurarmi che Firebase abbia caricato correttamente
+    setTimeout(function() {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                console.log("Utente autenticato:", user);
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('content-container').style.display = 'block';
+                const path = window.location.pathname;
+                if (path.includes("index.html")) {
+                    displayHomeContent();
+                } else if (path.includes("expenses.html")) {
+                    displayExpenses();
+                }
+            } else {
+                console.log("Nessun utente autenticato.");
+                document.getElementById('login-container').style.display = 'block';
+                document.getElementById('content-container').style.display = 'none';
             }
-        } else {
-            console.log("Nessun utente autenticato.");
-            document.getElementById('login-container').style.display = 'block';
-            document.getElementById('content-container').style.display = 'none';
-        }
-    });
+        });
+    }, 1000); // Aspetta 1 secondo per assicurarsi che Firebase sia pronto
 
     // Gestione login
     document.getElementById('loginForm').addEventListener('submit', function(e) {

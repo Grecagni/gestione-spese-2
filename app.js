@@ -1,148 +1,24 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const addExpenseBtn = document.getElementById('addExpenseBtn');
-    if (addExpenseBtn) {
-        addExpenseBtn.addEventListener('click', function() {
-            const formContainer = document.getElementById('expenseFormContainer');
-            if (formContainer) {
-                if (formContainer.style.display === 'none' || formContainer.style.display === '') {
-                    formContainer.style.display = 'block';
-                } else {
-                    formContainer.style.display = 'none';
-                }
-            }
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => {
+                    console.log('Service Worker registrato con successo:', registration);
+                })
+                .catch(error => {
+                    console.log('Service Worker registration failed:', error);
+                });
         });
-    }
-
-    const today = new Date().toISOString().split('T')[0];
-    const dateInput = document.getElementById('date');
-
-    if (dateInput) {
-        dateInput.value = today;
     }
 
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-            document.getElementById("auth-container").style.display = "none";
-            document.getElementById("content").style.display = "block";
-            addExpenseBtn.style.display = 'block';
             displayExpenses();
         } else {
-            document.getElementById("auth-container").innerHTML = `
-                <div style="text-align:center;">
-                    <h2>Accedi per continuare</h2>
-                    <input type="email" id="email" placeholder="Email" class="form-control mb-2">
-                    <input type="password" id="password" placeholder="Password" class="form-control mb-2">
-                    <button onclick="login()" class="btn btn-primary">Login</button>
-                </div>
-            `;
-            document.getElementById("content").style.display = "none";
-            addExpenseBtn.style.display = 'none';
+            // Gestisci la visualizzazione del form di login o simile qui
         }
     });
-
-    document.getElementById('splitType').addEventListener('change', function() {
-        const splitType = this.value;
-        const splitDetails = document.getElementById('splitDetails');
-        
-        if (splitType === 'equally') {
-            splitDetails.style.display = 'none';
-        } else {
-            splitDetails.style.display = 'block';
-        }
-    });
-
-    const expenseForm = document.getElementById('expenseForm');
-    if (expenseForm) {
-        expenseForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const description = document.getElementById('description').value;
-            const date = document.getElementById('date').value;
-            const totalAmount = parseFloat(document.getElementById('totalAmount').value).toFixed(2);
-            
-            const jackAmount = parseFloat(document.getElementById('jackAmount').value).toFixed(2);
-            const steAmount = parseFloat(document.getElementById('steAmount').value).toFixed(2);
-
-            if ((parseFloat(jackAmount) + parseFloat(steAmount)).toFixed(2) != totalAmount) {
-                alert("La somma di chi ha messo cosa deve essere uguale all'importo totale della spesa.");
-                return;
-            }
-
-            const splitType = document.getElementById('splitType').value;
-            let jackShare = 0;
-            let steShare = 0;
-
-            if (splitType === 'equally') {
-                jackShare = (totalAmount / 2).toFixed(2);
-                steShare = (totalAmount / 2).toFixed(2);
-            } else if (splitType === 'exact') {
-                jackShare = parseFloat(document.getElementById('jackSplit').value).toFixed(2);
-                steShare = parseFloat(document.getElementById('steSplit').value).toFixed(2);
-
-                if ((parseFloat(jackShare) + parseFloat(steShare)).toFixed(2) != totalAmount) {
-                    alert("La somma della divisione spesa deve essere uguale all'importo totale della spesa.");
-                    return;
-                }
-            }
-
-            const jackBalance = (jackShare - jackAmount).toFixed(2);
-            const steBalance = (steShare - steAmount).toFixed(2);
-
-            const expense = {
-                description,
-                date,
-                totalAmount: totalAmount,
-                jackAmount: jackAmount,
-                steAmount: steAmount,
-                jackShare: jackShare,
-                steShare: steShare,
-                jackBalance: jackBalance,
-                steBalance: steBalance,
-                userId: firebase.auth().currentUser.uid
-            };
-
-            db.collection("expenses").add(expense)
-                .then(() => {
-                    displayExpenses();
-                    document.getElementById('expenseFormContainer').style.display = 'none';
-                })
-                .catch((error) => {
-                    console.error("Errore nell'aggiungere la spesa: ", error);
-                });
-
-            document.getElementById('description').value = '';
-            document.getElementById('date').value = '';
-            document.getElementById('totalAmount').value = '';
-            document.getElementById('jackAmount').value = '';
-            document.getElementById('steAmount').value = '';
-            document.getElementById('jackSplit').value = '';
-            document.getElementById('steSplit').value = '';
-        });
-    }
 });
-
-function login() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    firebase.auth().signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            const user = userCredential.user;
-            document.getElementById("auth-container").style.display = "none";
-            document.getElementById("content").style.display = "block";
-            document.getElementById('addExpenseBtn').style.display = 'block';
-        })
-        .catch((error) => {
-            console.error("Errore nel login: ", error);
-            alert("Login fallito. Controlla le tue credenziali.");
-        });
-}
-
-function formatDate(dateString) {
-    const options = { year: '2-digit', month: '2-digit', day: '2-digit' };
-    const date = new Date(dateString);
-    return date.toLocaleDateString('it-IT', options);
-}
 
 function displayExpenses() {
     const expenseList = document.getElementById('expenseList');

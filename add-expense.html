@@ -33,6 +33,14 @@
         const db = firebase.firestore();
     </script>
     <script>
+        // Imposta la data odierna come valore predefinito
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
+            toggleSplitDetails();
+            document.getElementById('splitType').addEventListener('change', toggleSplitDetails);
+        });
+
         // Funzione per mostrare o nascondere i campi "Dovuto da Jack" e "Dovuto da Ste"
         function toggleSplitDetails() {
             const splitType = document.getElementById('splitType').value;
@@ -43,19 +51,34 @@
                 splitDetails.style.display = 'block';
             }
         }
-        document.addEventListener('DOMContentLoaded', function() {
-            // Inizialmente nasconde i campi "Dovuto da Jack" e "Dovuto da Ste"
-            toggleSplitDetails();
-            // Aggiunge un listener per la modifica della selezione del tipo di divisione
-            document.getElementById('splitType').addEventListener('change', toggleSplitDetails);
-        });
+
+        // Controlla che gli importi siano coerenti
+        function validateAmounts() {
+            const totalAmount = parseFloat(document.getElementById('totalAmount').value);
+            const jackAmount = parseFloat(document.getElementById('jackAmount').value);
+            const steAmount = parseFloat(document.getElementById('steAmount').value);
+            const jackShare = parseFloat(document.getElementById('jackShare').value) || 0;
+            const steShare = parseFloat(document.getElementById('steShare').value) || 0;
+            
+            if ((jackAmount + steAmount) !== totalAmount) {
+                alert('La somma degli importi messi da Jack e Ste non corrisponde al totale della spesa.');
+                return false;
+            }
+
+            if (document.getElementById('splitType').value === 'exact' && (jackShare + steShare) !== totalAmount) {
+                alert('La somma degli importi dovuti da Jack e Ste non corrisponde al totale della spesa.');
+                return false;
+            }
+
+            return true;
+        }
     </script>
 </head>
 <body>
     <div class="container">
         <h2 class="my-4">Inserisci Nuova Spesa</h2>
         <div id="expenseFormContainer" class="card p-4 mb-4">
-            <form id="expenseForm" class="form-group">
+            <form id="expenseForm" class="form-group" onsubmit="return validateAmounts();">
                 <input type="text" id="description" class="form-control mb-3" placeholder="Descrizione spesa" required>
                 <input type="date" id="date" class="form-control mb-3" required>
                 <input type="number" id="totalAmount" class="form-control mb-3" placeholder="Importo totale" required>

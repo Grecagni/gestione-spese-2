@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Associa il listener di eventi al pulsante 'addExpenseBtn' solo dopo che il DOM è pronto
     const addExpenseBtn = document.getElementById('addExpenseBtn');
     if (addExpenseBtn) {
         addExpenseBtn.addEventListener('click', function() {
@@ -14,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Imposta la data odierna come default nel formato yyyy-mm-dd
     const today = new Date().toISOString().split('T')[0];
     const dateInput = document.getElementById('date');
 
@@ -22,26 +20,23 @@ document.addEventListener('DOMContentLoaded', function() {
         dateInput.value = today;
     }
 
-    // Verifica lo stato di autenticazione
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-            // Utente loggato, visualizza il contenuto del sito
             document.getElementById("auth-container").style.display = "none";
             document.getElementById("content").style.display = "block";
-            addExpenseBtn.style.display = 'block'; // Mostra il pulsante "Aggiungi Spesa"
+            addExpenseBtn.style.display = 'block';
             displayExpenses();
         } else {
-            // Nessun utente loggato, mostra il form di login
             document.getElementById("auth-container").innerHTML = `
                 <div style="text-align:center;">
                     <h2>Accedi per continuare</h2>
-                    <input type="email" id="email" placeholder="Email">
-                    <input type="password" id="password" placeholder="Password">
-                    <button onclick="login()">Login</button>
+                    <input type="email" id="email" placeholder="Email" class="form-control mb-2">
+                    <input type="password" id="password" placeholder="Password" class="form-control mb-2">
+                    <button onclick="login()" class="btn btn-primary">Login</button>
                 </div>
             `;
             document.getElementById("content").style.display = "none";
-            addExpenseBtn.style.display = 'none'; // Nascondi il pulsante "Aggiungi Spesa"
+            addExpenseBtn.style.display = 'none';
         }
     });
 
@@ -68,7 +63,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const jackAmount = parseFloat(document.getElementById('jackAmount').value).toFixed(2);
             const steAmount = parseFloat(document.getElementById('steAmount').value).toFixed(2);
 
-            // Controllo 1: La somma di chi ha messo cosa deve essere uguale al totale
             if ((parseFloat(jackAmount) + parseFloat(steAmount)).toFixed(2) != totalAmount) {
                 alert("La somma di chi ha messo cosa deve essere uguale all'importo totale della spesa.");
                 return;
@@ -85,7 +79,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 jackShare = parseFloat(document.getElementById('jackSplit').value).toFixed(2);
                 steShare = parseFloat(document.getElementById('steSplit').value).toFixed(2);
 
-                // Controllo 2: La somma della divisione deve essere uguale al totale
                 if ((parseFloat(jackShare) + parseFloat(steShare)).toFixed(2) != totalAmount) {
                     alert("La somma della divisione spesa deve essere uguale all'importo totale della spesa.");
                     return;
@@ -108,11 +101,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 userId: firebase.auth().currentUser.uid
             };
 
-            // Aggiungi la spesa a Firestore
             db.collection("expenses").add(expense)
                 .then(() => {
                     displayExpenses();
-                    document.getElementById('expenseFormContainer').style.display = 'none'; // Nascondi il form dopo l'inserimento
+                    document.getElementById('expenseFormContainer').style.display = 'none';
                 })
                 .catch((error) => {
                     console.error("Errore nell'aggiungere la spesa: ", error);
@@ -129,14 +121,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Funzione di login
 function login() {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
     firebase.auth().signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
-            // Login riuscito
             const user = userCredential.user;
             document.getElementById("auth-container").style.display = "none";
             document.getElementById("content").style.display = "block";
@@ -157,11 +147,10 @@ function formatDate(dateString) {
 function displayExpenses() {
     const expenseList = document.getElementById('expenseList');
     
-    // Usa onSnapshot per aggiornare in tempo reale
     db.collection("expenses").orderBy("date", "desc").onSnapshot((querySnapshot) => {
-        // Svuota l'elenco prima di aggiungere nuove spese
         expenseList.innerHTML = '';
 
+        let expenses = [];
         let totalJackMesso = 0;
         let totalSteMesso = 0;
         let totalJackDovuto = 0;
@@ -169,6 +158,8 @@ function displayExpenses() {
 
         querySnapshot.forEach((doc) => {
             const expense = doc.data();
+            expenses.push(expense);
+            
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${formatDate(expense.date)}</td>
@@ -178,16 +169,17 @@ function displayExpenses() {
                 <td>€${parseFloat(expense.steAmount).toFixed(2)}</td>
                 <td>€${parseFloat(expense.jackShare).toFixed(2)}</td>
                 <td>€${parseFloat(expense.steShare).toFixed(2)}</td>
-                <td><button class="delete-btn" onclick="confirmDeleteExpense('${doc.id}')">Elimina</button></td>
+                <td><button class="btn btn-danger" onclick="confirmDeleteExpense('${doc.id}')">Elimina</button></td>
             `;
             expenseList.appendChild(row);
 
-            // Accumula i totali per Jack e Ste
             totalJackMesso += parseFloat(expense.jackAmount);
             totalSteMesso += parseFloat(expense.steAmount);
             totalJackDovuto += parseFloat(expense.jackShare);
             totalSteDovuto += parseFloat(expense.steShare);
         });
+
+        $('#expenseTable').DataTable();
 
         const jackBalance = totalJackMesso - totalJackDovuto;
         let balanceText = '';
@@ -201,6 +193,43 @@ function displayExpenses() {
         }
 
         document.getElementById('totalBalance').textContent = balanceText;
+
+        generateChart(expenses);
+    });
+}
+
+function generateChart(expenses) {
+    const ctx = document.getElementById('expenseChart').getContext('2d');
+    const labels = expenses.map(expense => formatDate(expense.date));
+    const dataJack = expenses.map(expense => parseFloat(expense.jackAmount));
+    const dataSte = expenses.map(expense => parseFloat(expense.steAmount));
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Spese di Jack',
+                data: dataJack,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            },
+            {
+                label: 'Spese di Ste',
+                data: dataSte,
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
     });
 }
 

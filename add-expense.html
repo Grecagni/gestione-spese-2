@@ -52,33 +52,38 @@
             }
         }
 
-        // Controlla che gli importi siano coerenti
-        function validateAmounts() {
+        // Controlla che gli importi siano coerenti e blocca l'inserimento se non lo sono
+        document.getElementById('expenseForm').addEventListener('submit', function(e) {
+            e.preventDefault();  // Blocca l'invio del form inizialmente
+            
             const totalAmount = parseFloat(document.getElementById('totalAmount').value);
             const jackAmount = parseFloat(document.getElementById('jackAmount').value);
             const steAmount = parseFloat(document.getElementById('steAmount').value);
             const jackShare = parseFloat(document.getElementById('jackShare').value) || 0;
             const steShare = parseFloat(document.getElementById('steShare').value) || 0;
             
+            // Controllo se gli importi messi sono corretti
             if ((jackAmount + steAmount) !== totalAmount) {
                 alert('La somma degli importi messi da Jack e Ste non corrisponde al totale della spesa.');
-                return false; // Blocca l'inserimento
+                return;  // Non permettere l'invio
             }
 
+            // Controllo se la divisione della spesa è corretta
             if (document.getElementById('splitType').value === 'exact' && (jackShare + steShare) !== totalAmount) {
                 alert('La somma degli importi dovuti da Jack e Ste non corrisponde al totale della spesa.');
-                return false; // Blocca l'inserimento
+                return;  // Non permettere l'invio
             }
 
-            return true;
-        }
+            // Se i controlli passano, invia il form
+            this.submit();
+        });
     </script>
 </head>
 <body>
     <div class="container">
         <h2 class="my-4">Inserisci Nuova Spesa</h2>
         <div id="expenseFormContainer" class="card p-4 mb-4">
-            <form id="expenseForm" class="form-group" onsubmit="return validateAmounts();">
+            <form id="expenseForm" class="form-group">
                 <input type="text" id="description" class="form-control mb-3" placeholder="Descrizione spesa" required>
                 <input type="date" id="date" class="form-control mb-3" required>
                 <input type="number" id="totalAmount" class="form-control mb-3" placeholder="Importo totale" required>

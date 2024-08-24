@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Spese - Spese</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS Personalizzato -->
+    <link rel="stylesheet" href="/gestione-spese-2/style.css">
+
+    <script src="/gestione-spese-2/app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2 class="my-4">Elenco Spese</h2>
+        <table id="expenseTable" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th rowspan="2">Data</th>
+                    <th rowspan="2">Descr.</th>
+                    <th rowspan="2">Tot.</th>
+                    <th colspan="2">Messo</th>
+                    <th colspan="2">Dovuto</th>
+                    <th rowspan="2">Opz.</th>
+                </tr>
+                <tr>
+                    <th>Jack</th>
+                    <th>Ste</th>
+                    <th>Jack</th>
+                    <th>Ste</th>
+                </tr>
+            </thead>
+            <tbody id="expenseList"></tbody>
+        </table>
+    </div>
+
+    <!-- Barra di navigazione -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-bottom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/gestione-spese-2/index.html">Home</a>
+            <a class="navbar-brand" href="/gestione-spese-2/add-expense.html">+</a>
+            <a class="navbar-brand" href="/gestione-spese-2/expenses.html">Spese</a>
+        </div>
+    </nav>
+</body>
+</html>

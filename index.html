@@ -35,9 +35,6 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
     </script>
-
-    <!-- Aggiungi questo script per caricare Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
@@ -60,9 +57,6 @@
 
             <h2>Ultime Spese</h2>
             <ul id="recentExpenses" class="list-group mb-4"></ul>
-
-            <h2>Riepilogo Spese</h2>
-            <canvas id="expenseSummaryChart" width="400" height="200"></canvas>
         </div>
     </div>
 
